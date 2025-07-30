@@ -1,49 +1,78 @@
 #include"User.hpp"
+#include "Administrator.hpp"
+#include "BookingAgent.hpp"
 
 std::string path = "users_log.json";
 
 
-void User :: showMenu(){
+void User :: showDashboard(){
     std::cout<<"Welcome to Airline Reservation and Management System\n"
         <<"Please select your role:\n"
         <<"1. Administrator\n"
         <<"2. Booking Agent\n"
         <<"3. Passenger\n";
-    processUser();
+    process();
 }
 
-void User :: processUser(){
+void User :: process(){
     cout<<"Enter choice:\n";
     cin>>role;
-    if (role == "1") {
+    switch(role) {
+        case(1):
         cout<<"--- Administrator Login ---\n";
-        userInputs();
-        // showAdminDashboard();
+        user_Inputs();
+        if(user_verify()){
+            cout<<"Login successful!\n";
+            userInterface = std::make_unique<Administrator>();
+        }
+        else{
+            cout<<"Login failed, wrong username or password!\n";
+            showDashboard();
+        }
         cout<<"ADMIN";
-    } else if (role == "2") {
-        // showAgentDashboard();
-    } else {
-        // showPassengerDashboard();
+        break;
+        case(2):
+            cout<<"--- Booking Agent Login ---\n";
+            user_Inputs();
+        if(user_verify()){
+            cout<<"Login successful!\n";
+            userInterface = std::make_unique<BookingAgent>();
+        }
+        else{
+            cout<<"Login failed, wrong username or password!\n";
+            showDashboard();
+        }
+        break;
+        case(3):
+            cout<<"--- Booking Agent Login ---\n";
+            user_Inputs();
+        if(user_verify()){
+            cout<<"Login successful!\n";
+            // userInterface = std::make_unique<Passenger>();
+        }
+        else{
+            cout<<"Login failed, wrong username or password!\n";
+            showDashboard();
+        }
+        break;
+        default:
+        break;
     }
-
+    if(userInterface){
+        userInterface->showDashboard();
+    }
+    showDashboard();
 }
 
-void User :: userInputs(){
+void User :: user_Inputs(){
     cout<<"Username: ";
     cin>>username;
     cout<<"Password: ";
     cin>>password;
     cout<<"\n";
-    if(verifyUser()){
-        cout<<"Login successful!\n";
-    }
-    else{
-        cout<<"Login failed, wrong username or password!\n";
-        showMenu();
-    }
 }
 
-bool User :: verifyUser(){
+bool User :: user_verify(){
     if (!fs::exists(path)) {
         std::cerr << "File not found: " << path << "\n";
         return false;

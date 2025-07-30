@@ -9,32 +9,38 @@
 #include <filesystem> 
 #include <nlohmann/json.hpp>
 #include <functional>  
+#include <memory>
 
 using namespace std;
 namespace fs = std::filesystem;
 using json = nlohmann::json;
 
+// class Administrator;
+// class BookingAgent;
+// class Passenger;
 
-class User{
+
+class User {
     private:
-    string role;
+    int role;
     string username;
     string password;
 
+    protected:
+    std::unique_ptr<User> userInterface;
+
     public:
-    User(){ }
+    // User(){ }
 
-    void showMenu();
+    virtual void showDashboard(void);
 
-    void processUser(void);
+    virtual void process(void);
 
-    void userInputs(void);
+    void user_Inputs(void);
 
-    bool verifyUser();
+    bool user_verify();
 
-
-
-
+    virtual ~User() = default;
 };
 
 
