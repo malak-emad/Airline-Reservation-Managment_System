@@ -1,0 +1,32 @@
+[
+    {
+        "arrivalDateTime": "2023-12-15 11:45",
+        "depDateTime": "2023-12-15 08:30",
+        "destination": "Los Angeles (LAX)",
+        "number": "AA123",
+        "origin": "Egypt",
+        "status": "Arrived",
+        "totalSeats": "180",
+        "type": "Boeing 737"
+    },
+    {
+        "arrivalDateTime": "2003-1-16 08:30",
+        "depDateTime": "Cairo",
+        "destination": "Jersy",
+        "number": "BA123",
+        "origin": "New",
+        "status": "Dealyed",
+        "totalSeats": 10,
+        "type": "MISO"
+    },
+    {
+        "arrivalDateTime": "2003-01-17 12:00",
+        "depDateTime": "2003-01-16 08:30",
+        "destination": "Sharm el-sheikh",
+        "number": "BB123",
+        "origin": "LA",
+        "status": "Delayed",
+        "totalSeats": 120,
+        "type": "MISO"
+    }
+]
