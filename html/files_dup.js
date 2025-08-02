@@ -1,0 +1,27 @@
+var files_dup =
+[
+    [ "nlohmann", "dir_515580d80ce330f75d53b138952279f9.html", "dir_515580d80ce330f75d53b138952279f9" ],
+    [ "Administrator.cpp", "_administrator_8cpp.html", null ],
+    [ "Administrator.hpp", "_administrator_8hpp.html", "_administrator_8hpp" ],
+    [ "Aircraft.cpp", "_aircraft_8cpp.html", null ],
+    [ "Aircraft.hpp", "_aircraft_8hpp.html", "_aircraft_8hpp" ],
+    [ "BookingAgent.cpp", "_booking_agent_8cpp.html", null ],
+    [ "BookingAgent.hpp", "_booking_agent_8hpp.html", "_booking_agent_8hpp" ],
+    [ "Dashboard.cpp", "_dashboard_8cpp.html", null ],
+    [ "Dashboard.hpp", "_dashboard_8hpp.html", "_dashboard_8hpp" ],
+    [ "Flight.cpp", "_flight_8cpp.html", null ],
+    [ "Flight.hpp", "_flight_8hpp.html", "_flight_8hpp" ],
+    [ "jsonpersistence.hpp", "jsonpersistence_8hpp.html", "jsonpersistence_8hpp" ],
+    [ "main.cpp", "main_8cpp.html", "main_8cpp" ],
+    [ "Maintenance.cpp", "_maintenance_8cpp.html", null ],
+    [ "Maintenance.hpp", "_maintenance_8hpp.html", "_maintenance_8hpp" ],
+    [ "MenuInterface.hpp", "_menu_interface_8hpp.html", "_menu_interface_8hpp" ],
+    [ "Passenger.cpp", "_passenger_8cpp.html", null ],
+    [ "Passenger.hpp", "_passenger_8hpp.html", "_passenger_8hpp" ],
+    [ "Payment.cpp", "_payment_8cpp.html", null ],
+    [ "Payment.hpp", "_payment_8hpp.html", "_payment_8hpp" ],
+    [ "Reservation.cpp", "_reservation_8cpp.html", null ],
+    [ "Reservation.hpp", "_reservation_8hpp.html", "_reservation_8hpp" ],
+    [ "User.cpp", "_user_8cpp.html", null ],
+    [ "User.hpp", "_user_8hpp.html", "_user_8hpp" ]
+];
