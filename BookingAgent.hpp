@@ -15,13 +15,21 @@ using namespace std;
 namespace fs = std::filesystem;
 using json = nlohmann::json;
 
-class BookingAgent : public User{
+// The BookingAgent class represents a booking agent user in the airline system.
+// A BookingAgent can search flights, create reservations, modify or cancel them,
+// and logout from the system. Inherits from User.
+class BookingAgent : public User {
     private:
-    int bookingChoice;
+        int bookingChoice;      // Stores the menu option chosen by the booking agent
+        string origin, dest, date; // Used for storing flight search input (origin, destination, date)
 
     public:
-    void showDashboard() override;
-    void process() override;
+        // Display the booking agent menu
+        void showMenu() override;
+
+        // Process the selected booking agent menu choice
+        void processChoice() override;
+
 
 };
 
