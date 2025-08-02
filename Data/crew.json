@@ -1,0 +1,36 @@
+[
+    {
+        "attendants": [
+            {
+                "available": true,
+                "id": "FA001",
+                "name": "Emma Watson"
+            },
+            {
+                "available": true,
+                "id": "FA002",
+                "name": "John Cena"
+            }
+        ],
+        "available": true,
+        "name": "Captain Sarah Connor",
+        "pilotID": "PL001"
+    },
+    {
+        "attendants": [
+            {
+                "available": true,
+                "id": "FA003",
+                "name": "Alice Johnson"
+            },
+            {
+                "available": true,
+                "id": "FA004",
+                "name": "Bruce Wayne"
+            }
+        ],
+        "available": true,
+        "name": "Captain James Kirk",
+        "pilotID": "PL002"
+    }
+]

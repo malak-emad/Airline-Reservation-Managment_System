@@ -1,0 +1,32 @@
+[
+    {
+        "id": "1",
+        "password": "123456",
+        "role": "Administrator",
+        "username": "adminUser"
+    },
+    {
+        "id": "2",
+        "password": "123456",
+        "role": "BookingAgent",
+        "username": "agent42"
+    },
+    {
+        "id": "3",
+        "password": "123456",
+        "role": "Passenger",
+        "username": "passenger4"
+    },
+    {
+        "id": "4",
+        "password": "123456",
+        "role": "passenger",
+        "username": "ahmed00"
+    },
+    {
+        "id": "5",
+        "password": "123456",
+        "role": "BookingAgent",
+        "username": "aly1"
+    }
+]

@@ -1,0 +1,10 @@
+[
+    {
+        "flightNumber": "BA123",
+        "passengerID": "4",
+        "paymentMethod": "Card",
+        "price": "$0",
+        "reservationID": "R1",
+        "seatNumber": "3"
+    }
+]

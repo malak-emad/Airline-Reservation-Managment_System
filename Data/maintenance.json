@@ -1,0 +1,20 @@
+[
+    {
+        "aircraftID": "B737-001",
+        "date": "2023-12-01",
+        "description": "Engine inspection and oil replacement",
+        "status": "Completed"
+    },
+    {
+        "aircraftID": "A320-002",
+        "date": "2023-12-05",
+        "description": "Landing gear check and hydraulic test",
+        "status": "Pending"
+    },
+    {
+        "aircraftID": "B777-003",
+        "date": "2023-12-08",
+        "description": "Full cabin safety check and deep cleaning",
+        "status": "Completed"
+    }
+]

@@ -1,0 +1,16 @@
+[
+    {
+        "aircraftID": "",
+        "aircraftMode": "",
+        "available": true,
+        "lastMaintenanceDate": "",
+        "totalSeats": 0
+    },
+    {
+        "aircraftID": "4599",
+        "aircraftMode": "",
+        "available": true,
+        "lastMaintenanceDate": "N/A",
+        "totalSeats": 120
+    }
+]
