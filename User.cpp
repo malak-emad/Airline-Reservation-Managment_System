@@ -12,74 +12,65 @@
 #include "User.hpp"
 
 // --- Static Members ---
-static std::string path = "data/users_log.json"; ///< Path to the JSON user log file
-
-/// List of all users loaded from JSON at startup
-std::vector<std::shared_ptr<User>> User::userList = JsonPersistence<User>::loadFromJson("data/users_log.json");
-
-/// In-memory log of user activities for the current session
+std::vector<std::shared_ptr<User>> User::userList = {};
 std::vector<std::pair<std::string,std::string>> User::activityLogs;
+
+static std::string filePath = "data/users_log.json"; ///< Path to the JSON user log file
 
 
 // =====================================================================
 //                        Menu Functions
 // =====================================================================
 
-/**
- * @brief Display the Admin/User Management menu.
- */
 void User::showMenu() {
-    cout <<"---Manage Users---\n";
-    cout << "1. View Users\n"
-         << "2. Add User\n"
-         << "3. Update User\n"
-         << "4. Delete user\n"
-         << "5. Logout\n";
+    std::cout <<"--- Manage Users ---\n";
+    std::cout << "1. View Users\n"
+              << "2. Add User\n"
+              << "3. Update User\n"
+              << "4. Delete User\n"
+              << "5. Logout\n";
     processChoice();
 }
 
-/**
- * @brief Process the user's menu selection and execute the corresponding action.
- */
 void User::processChoice() {
-    int role;
-    string id;
+    int choice;
+    std::string id;
 
-    cout << "Enter choice:\n";
-    cin >> role;
+    std::cout << "Enter choice:\n";
+    std::cin >> choice;
 
-    switch(role) {
-        case(1):
-            cout << "--- All Users ---\n";
+    switch(choice) {
+        case 1:
+            std::cout << "--- All Users ---\n";
             get_allUsers();
             break;
 
-        case(2):
-            cout << "--- Add User ---\n";
+        case 2:
+            std::cout << "--- Add User ---\n";
             setUser();
             break;
 
-        case(3):
-            cout << "--- Update User ---\n";
-            cout << "Enter User ID\n";
-            cin >> id;
+        case 3:
+            std::cout << "--- Update User ---\n";
+            std::cout << "Enter User ID: ";
+            std::cin >> id;
             updateUser(id);
             break;
 
-        case(4):
-            cout << "--- Delete User ---\n";
-            cout << "Enter User ID\n";
-            cin >> id;
+        case 4:
+            std::cout << "--- Delete User ---\n";
+            std::cout << "Enter User ID: ";
+            std::cin >> id;
             deleteUser(id);
             break;
 
-        case(5):
-            cout << "--- Logging out ---\n";
+        case 5:
+            std::cout << "--- Logging out ---\n";
             User::logActivity(getID(), "Logged Out");
             return;
 
         default:
-            cerr << "Invalid input\n";
+            std::cerr << "Invalid input\n";
             break;
     }
 }
@@ -89,97 +80,126 @@ void User::processChoice() {
 //                        User Management
 // =====================================================================
 
-/**
- * @brief Display all registered users.
- */
 void User::get_allUsers() {
     loadUsers(); // Reload from JSON
 
     if (userList.empty()) {
-        cout << "No users available.\n";
+        std::cout << "No users available.\n";
         return;
     }
 
     for (const auto& userPtr : userList) {
-        if (!userPtr) continue; // Safety check
+        if (!userPtr) continue;
 
-        cout << "Username: " << userPtr->username << "\n"
-             << "User ID: " << userPtr->ID << "\n"
-             << "Role: " << userPtr->role << "\n"
-             << "-----------------------------\n";
+        std::cout << "Username: " << userPtr->username << "\n"
+                  << "User ID: " << userPtr->ID << "\n"
+                  << "Role: " << userPtr->role << "\n"
+                  << "-----------------------------\n";
     }
 }
 
-/**
- * @brief Add a new user and save it to the JSON file.
- */
 void User::setUser() {
     int inputID;
     auto newUser = std::make_shared<User>();
 
-    cout << "Enter Username: \n";
-    cin >> newUser->username;
+    std::cout << "Enter Username: ";
+    std::cin >> newUser->username;
 
-    cout << "Enter password: \n";
-    cin >> newUser->password;
+    std::cout << "Enter Password: ";
+    std::cin >> newUser->password;
 
-    cout << "Enter ID: \n";
-    cin >> inputID;
+    std::cout << "Enter ID: ";
+    std::cin >> inputID;
     newUser->ID = std::to_string(inputID);
 
-    cout << "Enter Role: \n";
-    cin >> newUser->role;
+    std::cout << "Enter Role: ";
+    std::cin >> newUser->role;
 
-    // Add to list and save
+    // Add to list
     userList.push_back(newUser);
-    cout << "User added successfully!\n";
+    std::cout << "User added successfully!\n";
 
-    saveUsers(); // Persist to JSON
+    // Save to JSON
+    saveUsers();
 }
 
 /**
- * @brief Update a user's password and role by their ID.
- * @param id ID of the user to update
+ * @brief Update a user's password and role directly in the JSON file by their ID.
  */
 void User::updateUser(const std::string& id) {
-    for (auto& userPtr : userList) {
-        if (userPtr && userPtr->ID == id) {
+    json j;
+    std::ifstream inFile(filePath);
+    if (!inFile.is_open()) {
+        std::cout << "No users found.\n";
+        return;
+    }
+    inFile >> j;
+    inFile.close();
 
-            cout << "Enter new password: ";
-            cin >> userPtr->password;
+    bool found = false;
+    for (auto& item : j) {
+        if (item["id"] == id) {
+            std::string newPassword, newRole;
 
-            cout << "Enter new role (current: " << userPtr->role << "): ";
-            cin >> userPtr->role;
+            std::cout << "Enter new password: ";
+            std::cin >> newPassword;
 
-            cout << "User " << id << " updated successfully!\n";
+            std::cout << "Enter new role (current: " << item["role"] << "): ";
+            std::cin >> newRole;
 
-            saveUsers(); // Persist changes
-            return;
+            item["password"] = newPassword;
+            item["role"] = newRole;
+
+            found = true;
+            break;
         }
     }
-    cout << "No user with ID: " << id << " was found\n";
+
+    if (found) {
+        std::ofstream outFile(filePath, std::ios::trunc);
+        outFile << std::setw(4) << j;
+        outFile.close();
+        std::cout << "User " << id << " updated successfully!\n";
+
+        loadUsers(); // Refresh in-memory list
+    } else {
+        std::cout << "No user with ID: " << id << " was found\n";
+    }
 }
 
+
 /**
- * @brief Delete a user from the system by their ID.
- * @param id ID of the user to delete
+ * @brief Delete a user from the JSON file by their ID.
  */
 void User::deleteUser(const std::string& id) {
-    for (auto it = userList.begin(); it != userList.end(); ++it) {
-        if (*it && (*it)->ID == id) {
-            userList.erase(it);
-            cout << "User " << id << " deleted successfully!\n";
-
-            saveUsers(); // Persist changes
-            return;
-        }
+    json j;
+    std::ifstream inFile(filePath);
+    if (!inFile.is_open()) {
+        std::cout << "No users found.\n";
+        return;
     }
-    cout << "No User with ID: " << id << " to delete.\n";
+    inFile >> j;
+    inFile.close();
+
+    size_t beforeSize = j.size();
+    j.erase(std::remove_if(j.begin(), j.end(),
+                           [&](const json& item) {
+                               return item["id"] == id;
+                           }),
+            j.end());
+
+    if (j.size() < beforeSize) {
+        std::ofstream outFile(filePath, std::ios::trunc);
+        outFile << std::setw(4) << j;
+        outFile.close();
+        std::cout << "User " << id << " deleted successfully!\n";
+
+        loadUsers(); // Refresh in-memory list
+    } else {
+        std::cout << "No User with ID: " << id << " to delete.\n";
+    }
 }
 
-/**
- * @brief Equality operator. Users are equal if their IDs match.
- */
 bool User::operator==(const User& other) const {
     return (ID == other.ID);
 }
@@ -189,10 +209,6 @@ bool User::operator==(const User& other) const {
 //                   JSON Serialization / Deserialization
 // =====================================================================
 
-/**
- * @brief Convert the user object to a JSON object.
- * @return JSON object representing the user
- */
 json User::toJson() const {
     return {
         {"username", username},
@@ -202,16 +218,11 @@ json User::toJson() const {
     };
 }
 
-/**
- * @brief Load user data from a JSON object.
- * @param j JSON object containing the user data
- */
 void User::fromJson(const json& j) {
     username = j.value("username", "");
     password = j.value("password", "");
     role     = j.value("role", "");
 
-    // Handle ID as string or number
     if (j.contains("id")) {
         if (j["id"].is_number()) {
             ID = std::to_string(j["id"].get<int>());
@@ -223,37 +234,38 @@ void User::fromJson(const json& j) {
     }
 }
 
-/**
- * @brief Save all users to the JSON file.
- */
 void User::saveUsers() {
-    JsonPersistence<User>::saveToJson("data/users_log.json", userList);
-}
+    // Load existing users
+    json j;
+    std::ifstream inFile(filePath);
+    if (inFile.is_open()) inFile >> j;
+    inFile.close();
 
-/**
- * @brief Load all users from the JSON file.
- */
-void User::loadUsers() {
-    userList = JsonPersistence<User>::loadFromJson("data/users_log.json");
-}
-
-
-// =====================================================================
-//                        Utility Functions
-// =====================================================================
-
-/**
- * @brief Check if a given user ID belongs to a passenger.
- * @param pID ID to check
- * @return True if the ID belongs to a passenger, false otherwise
- */
-bool User::isPassenger(const string& pID) {
-    for (auto& userPtr : userList) {
-        if (userPtr && userPtr->ID == pID) {
-            return true;
-        }
+    // Append or rewrite
+    j.clear();
+    for (const auto& userPtr : userList) {
+        if (userPtr) j.push_back(userPtr->toJson());
     }
-    return false;
+
+    std::ofstream outFile(filePath, std::ios::trunc);
+    outFile << std::setw(4) << j;
+    outFile.close();
+}
+
+void User::loadUsers() {
+    userList.clear();
+    json j;
+    std::ifstream inFile(filePath);
+    if (!inFile.is_open()) return;
+
+    inFile >> j;
+    inFile.close();
+
+    for (auto& item : j) {
+        auto user = std::make_shared<User>();
+        user->fromJson(item);
+        userList.push_back(user);
+    }
 }
 
 
@@ -261,13 +273,10 @@ bool User::isPassenger(const string& pID) {
 //                        User Activity Logs
 // =====================================================================
 
-/**
- * @brief Generate a user activity report from the JSON file.
- */
 void User::generateUserActivityReport() {
     std::cout << "\n--- User Activity Report ---\n";
 
-    std::ifstream file("data/users_log.json");
+    std::ifstream file(filePath);
     if (!file.is_open()) {
         std::cout << "No user activity logs found.\n";
         return;
@@ -278,24 +287,16 @@ void User::generateUserActivityReport() {
 
     int i = 1;
     for (auto& item : j) {
-        std::cout << i++ << ". UserID: " << item.value("userID", "")
-                  << " | Action: " << item.value("action", "")
-                  << " | Time: " << item.value("time", "") << "\n";
+        std::cout << i++ << ". Username: " << item.value("username", "")
+                  << " | Role: " << item.value("role", "")
+                  << " | ID: " << item.value("id", "") << "\n";
     }
 }
 
-/**
- * @brief Log a user activity in the current session (in-memory).
- * @param userID ID of the user
- * @param action Description of the action
- */
 void User::logActivity(const std::string& userID, const std::string& action) {
     activityLogs.push_back({userID, action});
 }
 
-/**
- * @brief Show the in-memory session user activity report.
- */
 void User::showUserActivityReport() {
     std::cout << "\n--- User Activity Report ---\n";
 

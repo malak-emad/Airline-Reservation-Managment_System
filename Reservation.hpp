@@ -87,7 +87,7 @@ private:
     string price;
     string paymentMethod;
 
-    static inline const string filePath = "reservations.json";
+    static inline const string filePath = "Data/reservations.json";
 
     static string generateReservationID();
 

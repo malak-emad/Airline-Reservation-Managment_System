@@ -1,0 +1,34 @@
+[
+    {
+        "flightNumber": "BA456",
+        "passengerID": "3",
+        "paymentMethod": "PayPal",
+        "price": "$250",
+        "reservationID": "R1",
+        "seatNumber": "22C"
+    },
+    {
+        "flightNumber": "AA123",
+        "passengerID": "4",
+        "paymentMethod": "CreditCard",
+        "price": "$300",
+        "reservationID": "R2",
+        "seatNumber": "10B"
+    },
+    {
+        "flightNumber": "AA789",
+        "passengerID": "3",
+        "paymentMethod": "Cash",
+        "price": "$200",
+        "reservationID": "R3",
+        "seatNumber": "15C"
+    },
+    {
+        "flightNumber": "A17",
+        "passengerID": "",
+        "paymentMethod": "Card",
+        "price": "$0",
+        "reservationID": "R4",
+        "seatNumber": "14C"
+    }
+]

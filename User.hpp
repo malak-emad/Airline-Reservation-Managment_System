@@ -139,7 +139,7 @@ public:
     /**
      * @brief Load users from the JSON file.
      */
-    void loadUsers();
+    static void loadUsers();
 
     /**
      * @brief Update an existing user's information.

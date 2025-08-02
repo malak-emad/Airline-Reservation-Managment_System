@@ -12,5 +12,26 @@
         "available": true,
         "lastMaintenanceDate": "N/A",
         "totalSeats": 120
+    },
+    {
+        "aircraftID": "BA123",
+        "aircraftMode": "",
+        "available": true,
+        "lastMaintenanceDate": "N/A",
+        "totalSeats": 70
+    },
+    {
+        "aircraftID": "AC88",
+        "aircraftMode": "",
+        "available": true,
+        "lastMaintenanceDate": "N/A",
+        "totalSeats": 70
+    },
+    {
+        "aircraftID": "AC87",
+        "aircraftMode": "",
+        "available": true,
+        "lastMaintenanceDate": "N/A",
+        "totalSeats": 70
     }
 ]

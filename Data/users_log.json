@@ -34,5 +34,11 @@
         "password": "123456",
         "role": "",
         "username": "mikelJakson"
+    },
+    {
+        "id": "7",
+        "password": "3245",
+        "role": "bookingAgent",
+        "username": "userTest"
     }
 ]
