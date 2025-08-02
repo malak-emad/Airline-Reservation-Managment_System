@@ -2,7 +2,7 @@
     {
         "attendants": [
             {
-                "available": true,
+                "available": false,
                 "id": "FA001",
                 "name": "Emma Watson"
             },
@@ -12,7 +12,7 @@
                 "name": "John Cena"
             }
         ],
-        "available": true,
+        "available": false,
         "name": "Captain Sarah Connor",
         "pilotID": "PL001"
     },

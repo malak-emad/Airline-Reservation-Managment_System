@@ -1,17 +1,35 @@
+/**
+ * @file User.cpp
+ * @brief Implements the User class methods for the Airline Reservation and Management System.
+ *
+ * This file provides:
+ * - User management (add, update, delete)
+ * - Menu-driven interface for administrators
+ * - JSON-based persistence for storing users
+ * - User activity logging and reporting
+ */
+
 #include "User.hpp"
 
 // --- Static Members ---
-static std::string path = "data/users_log.json"; 
-// All users loaded from JSON at startup
+static std::string path = "data/users_log.json"; ///< Path to the JSON user log file
+
+/// List of all users loaded from JSON at startup
 std::vector<std::shared_ptr<User>> User::userList = JsonPersistence<User>::loadFromJson("data/users_log.json");
-// In-memory log of user activities for the current session
+
+/// In-memory log of user activities for the current session
 std::vector<std::pair<std::string,std::string>> User::activityLogs;
 
 
-// ------------------------------------------------------------
-// Display the Admin/User Management menu
-// ------------------------------------------------------------
+// =====================================================================
+//                        Menu Functions
+// =====================================================================
+
+/**
+ * @brief Display the Admin/User Management menu.
+ */
 void User::showMenu() {
+    cout <<"---Manage Users---\n";
     cout << "1. View Users\n"
          << "2. Add User\n"
          << "3. Update User\n"
@@ -20,9 +38,9 @@ void User::showMenu() {
     processChoice();
 }
 
-// ------------------------------------------------------------
-// Process menu input for user management
-// ------------------------------------------------------------
+/**
+ * @brief Process the user's menu selection and execute the corresponding action.
+ */
 void User::processChoice() {
     int role;
     string id;
@@ -66,20 +84,24 @@ void User::processChoice() {
     }
 }
 
-// ------------------------------------------------------------
-// Display all registered users
-// ------------------------------------------------------------
+
+// =====================================================================
+//                        User Management
+// =====================================================================
+
+/**
+ * @brief Display all registered users.
+ */
 void User::get_allUsers() {
-    loadUsers(); // reload from JSON
+    loadUsers(); // Reload from JSON
 
     if (userList.empty()) {
         cout << "No users available.\n";
         return;
     }
 
-    cout << "--- Users ---\n";
     for (const auto& userPtr : userList) {
-        if (!userPtr) continue; // safety check
+        if (!userPtr) continue; // Safety check
 
         cout << "Username: " << userPtr->username << "\n"
              << "User ID: " << userPtr->ID << "\n"
@@ -88,9 +110,9 @@ void User::get_allUsers() {
     }
 }
 
-// ------------------------------------------------------------
-// Add a new user and persist to JSON
-// ------------------------------------------------------------
+/**
+ * @brief Add a new user and save it to the JSON file.
+ */
 void User::setUser() {
     int inputID;
     auto newUser = std::make_shared<User>();
@@ -112,16 +134,16 @@ void User::setUser() {
     userList.push_back(newUser);
     cout << "User added successfully!\n";
 
-    saveUsers(); // persist to JSON
+    saveUsers(); // Persist to JSON
 }
 
-// ------------------------------------------------------------
-// Update user info (password and role) by ID
-// ------------------------------------------------------------
+/**
+ * @brief Update a user's password and role by their ID.
+ * @param id ID of the user to update
+ */
 void User::updateUser(const std::string& id) {
     for (auto& userPtr : userList) {
         if (userPtr && userPtr->ID == id) {
-            cout << "--- Update User " << id << " ---\n";
 
             cout << "Enter new password: ";
             cin >> userPtr->password;
@@ -131,39 +153,46 @@ void User::updateUser(const std::string& id) {
 
             cout << "User " << id << " updated successfully!\n";
 
-            saveUsers(); // persist changes
+            saveUsers(); // Persist changes
             return;
         }
     }
     cout << "No user with ID: " << id << " was found\n";
 }
 
-// ------------------------------------------------------------
-// Delete user by ID
-// ------------------------------------------------------------
+/**
+ * @brief Delete a user from the system by their ID.
+ * @param id ID of the user to delete
+ */
 void User::deleteUser(const std::string& id) {
     for (auto it = userList.begin(); it != userList.end(); ++it) {
         if (*it && (*it)->ID == id) {
             userList.erase(it);
             cout << "User " << id << " deleted successfully!\n";
 
-            saveUsers(); // persist changes
+            saveUsers(); // Persist changes
             return;
         }
     }
     cout << "No User with ID: " << id << " to delete.\n";
 }
 
-// ------------------------------------------------------------
-// Equality operator (users considered equal if IDs match)
-// ------------------------------------------------------------
+/**
+ * @brief Equality operator. Users are equal if their IDs match.
+ */
 bool User::operator==(const User& other) const {
     return (ID == other.ID);
 }
 
-// ------------------------------------------------------------
-// JSON Serialization & Deserialization
-// ------------------------------------------------------------
+
+// =====================================================================
+//                   JSON Serialization / Deserialization
+// =====================================================================
+
+/**
+ * @brief Convert the user object to a JSON object.
+ * @return JSON object representing the user
+ */
 json User::toJson() const {
     return {
         {"username", username},
@@ -173,12 +202,16 @@ json User::toJson() const {
     };
 }
 
+/**
+ * @brief Load user data from a JSON object.
+ * @param j JSON object containing the user data
+ */
 void User::fromJson(const json& j) {
     username = j.value("username", "");
     password = j.value("password", "");
     role     = j.value("role", "");
 
-    // Handle id as string or int
+    // Handle ID as string or number
     if (j.contains("id")) {
         if (j["id"].is_number()) {
             ID = std::to_string(j["id"].get<int>());
@@ -190,20 +223,30 @@ void User::fromJson(const json& j) {
     }
 }
 
-// ------------------------------------------------------------
-// Save and Load Users from JSON
-// ------------------------------------------------------------
+/**
+ * @brief Save all users to the JSON file.
+ */
 void User::saveUsers() {
     JsonPersistence<User>::saveToJson("data/users_log.json", userList);
 }
 
+/**
+ * @brief Load all users from the JSON file.
+ */
 void User::loadUsers() {
     userList = JsonPersistence<User>::loadFromJson("data/users_log.json");
 }
 
-// ------------------------------------------------------------
-// Check if a user ID belongs to a passenger
-// ------------------------------------------------------------
+
+// =====================================================================
+//                        Utility Functions
+// =====================================================================
+
+/**
+ * @brief Check if a given user ID belongs to a passenger.
+ * @param pID ID to check
+ * @return True if the ID belongs to a passenger, false otherwise
+ */
 bool User::isPassenger(const string& pID) {
     for (auto& userPtr : userList) {
         if (userPtr && userPtr->ID == pID) {
@@ -213,10 +256,14 @@ bool User::isPassenger(const string& pID) {
     return false;
 }
 
-// ------------------------------------------------------------
-// Generate user activity report from JSON file
-// (Static log file report, not in-memory session log)
-// ------------------------------------------------------------
+
+// =====================================================================
+//                        User Activity Logs
+// =====================================================================
+
+/**
+ * @brief Generate a user activity report from the JSON file.
+ */
 void User::generateUserActivityReport() {
     std::cout << "\n--- User Activity Report ---\n";
 
@@ -237,16 +284,18 @@ void User::generateUserActivityReport() {
     }
 }
 
-// ------------------------------------------------------------
-// Log a user activity in memory (current session)
-// ------------------------------------------------------------
+/**
+ * @brief Log a user activity in the current session (in-memory).
+ * @param userID ID of the user
+ * @param action Description of the action
+ */
 void User::logActivity(const std::string& userID, const std::string& action) {
     activityLogs.push_back({userID, action});
 }
 
-// ------------------------------------------------------------
-// Show the in-memory session activity log
-// ------------------------------------------------------------
+/**
+ * @brief Show the in-memory session user activity report.
+ */
 void User::showUserActivityReport() {
     std::cout << "\n--- User Activity Report ---\n";
 

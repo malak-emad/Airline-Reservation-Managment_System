@@ -32,7 +32,6 @@ void Administrator :: processChoice(){
     } 
     // Option 3: Manage Users
     else if (adminChoice == 3) {
-        cout <<"---Manage Users---\n";
         menu = std::make_unique<User>();     // Create a User object
         menu ->showMenu();                   // Show User management menu
     } 
