@@ -12,19 +12,28 @@
 #include "User.hpp"
 #include "MenuInterface.hpp"
 
+// Use standard namespace for convenience
 using namespace std;
+
+// Create an alias for the filesystem namespace
 namespace fs = std::filesystem;
+
+// Create an alias for the nlohmann JSON library
 using json = nlohmann::json;
 
-class Administrator : public User{
+// Administrator class inherits from User
+// This class handles administrative functionalities
+class Administrator : public User {
     private:
-    int adminChoice;
-    std::unique_ptr<MenuInterface> menu;
+        int adminChoice; // Stores the administrator's menu choice
+        std::unique_ptr<MenuInterface> menu; // Pointer to the active menu (Flight, Aircraft, or User)
 
     public:
-    void showDashboard() override;
-    void process() override;
+        // Display the administrator menu
+        void showMenu() override;
 
+        // Process the selected menu option
+        void processChoice() override;
 };
 
 #endif
