@@ -1,12 +1,11 @@
 #include<iostream>
 #include<string>
-#include"User.hpp"
+#include"Dashboard.hpp"
 
 int main(void){
-    User user1;
-    user1.showDashboard();
-// No need to delete; automatic cleanup when `user` goes out of scope
 
+    DashBoard app;
+    app.run();
 
     return 0;
 }
